@@ -16,11 +16,9 @@ One version number lives in five places: `.claude-plugin/plugin.json`,
    manifests, builds `ai-board-lite-X.Y.Z.zip` (+ `.sha256`) and publishes a
    GitHub release with the CHANGELOG section as notes.
 
-Never move or delete a `v*` tag: a bad release is fixed with a new patch
-version. When the repository goes public, enforce this with a tag ruleset
-(Settings → Rules → Rulesets: target `refs/tags/v*`, block deletion and
-updates). GitHub doesn't offer rulesets on private repositories on the
-current plan.
+`v*` tags cannot be moved or deleted (repository ruleset "release tags are
+immutable"), so a bad release is fixed with a new patch version, never by
+re-tagging.
 
 After a release:
 - ai-board.studio: copy the ZIP to `public/downloads/` in the site repo and
