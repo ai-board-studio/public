@@ -1,7 +1,7 @@
 {
   "name": "ai-board-lite",
   "displayName": "AI Board Lite",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Free executive skills for meetings, PowerPoint, Excel and decisions: action items from a transcript, meeting prep, board-ready decks and deck reviews, spreadsheet analysis and models, decision memos and stakeholder updates.",
   "author": {
     "name": "AI Board",
@@ -9,7 +9,7 @@
     "url": "https://ai-board.studio"
   },
   "homepage": "https://ai-board.studio/en/plugins/ai-board-lite",
-  "icon": "./assets/logo.svg",
+  "icon": "./assets/logo.png",
   "documentationUrl": "https://ai-board.studio/en/plugins/ai-board-lite",
   "supportUrl": "https://ai-board.studio/en/plugins/support",
   "privacyPolicyUrl": "https://ai-board.studio/en/plugins/privacy",
