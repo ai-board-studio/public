@@ -1,0 +1,20 @@
+{
+  "name": "ai-board-studio",
+  "interface": {
+    "displayName": "AI Board"
+  },
+  "plugins": [
+    {
+      "name": "ai-board-lite",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

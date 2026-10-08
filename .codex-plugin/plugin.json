@@ -1,0 +1,41 @@
+{
+  "name": "ai-board-lite",
+  "version": "0.1.0",
+  "description": "Free executive skills for meetings, PowerPoint, Excel and decisions: action items from a transcript, meeting prep, board-ready decks and deck reviews, spreadsheet analysis and models, decision memos and stakeholder updates.",
+  "author": {
+    "name": "AI Board",
+    "email": "jordi.daniels@ai-board.studio",
+    "url": "https://ai-board.studio"
+  },
+  "homepage": "https://ai-board.studio/en/plugins/ai-board-lite",
+  "license": "MIT",
+  "keywords": [
+    "meetings",
+    "powerpoint",
+    "excel",
+    "presentations",
+    "spreadsheets",
+    "decision-memo",
+    "executive"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AI Board Lite",
+    "shortDescription": "Meetings, decks, Excel, memos",
+    "longDescription": "AI Board Lite: free skills for the work that comes back every week in an executive's calendar.\n\n**Meetings.** Turn a transcript into decisions and action items with owners, dates and the quote behind each one, plus follow-up drafts. Prep a meeting from what changed since last time.\n\n**PowerPoint.** Build a board-ready deck from notes (storyline first, one message per slide, then a .pptx), review a deck the way a board member reads it, and compare two versions on message and numbers.\n\n**Excel.** Explain what a spreadsheet says with the biggest movements, variances and data problems, each with its cell reference, or build a working budget, forecast or tracker with real formulas.\n\n**Decisions.** Write a one-page decision memo with honest trade-offs, or a two-minute update for a board, investors or a team.\n\nThe skills only use what you give them, never invent numbers, never send anything and create files only when you say yes. They answer in your language.",
+    "developerName": "AI Board",
+    "category": "Productivity",
+    "capabilities": [],
+    "websiteURL": "https://ai-board.studio/en/plugins/ai-board-lite",
+    "supportURL": "https://ai-board.studio/en/plugins/support",
+    "privacyPolicyURL": "https://ai-board.studio/en/plugins/privacy",
+    "defaultPrompt": [
+      "Here's the transcript of today's meeting. What are the action items?",
+      "Turn these notes into five slides for the board.",
+      "What does this spreadsheet tell me, and where are the variances?"
+    ],
+    "brandColor": "#123E8C",
+    "composerIcon": "./assets/logo.svg",
+    "logo": "./assets/logo.svg"
+  }
+}

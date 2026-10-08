@@ -1,0 +1,19 @@
+{
+  "name": "ai-board-studio",
+  "owner": {
+    "name": "AI Board",
+    "email": "jordi.daniels@ai-board.studio",
+    "url": "https://ai-board.studio"
+  },
+  "metadata": {
+    "description": "Free AI Board plugins."
+  },
+  "plugins": [
+    {
+      "name": "ai-board-lite",
+      "source": "./",
+      "description": "Free executive skills for meetings, PowerPoint, Excel and decisions: action items from a transcript, meeting prep, board-ready decks and deck reviews, spreadsheet analysis and models, decision memos and stakeholder updates.",
+      "version": "0.1.0"
+    }
+  ]
+}

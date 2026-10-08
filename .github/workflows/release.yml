@@ -1,0 +1,44 @@
+name: release
+
+# Push a tag vX.Y.Z on main (after scripts/bump.mjs and a merged CHANGELOG
+# entry). The tag must match every manifest's version, or nothing is released.
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - name: Tag is on main
+        run: git merge-base --is-ancestor "$GITHUB_SHA" origin/main
+      - name: Tag matches manifests
+        run: node scripts/check.mjs --tag "$GITHUB_REF_NAME"
+      - name: Validate for Claude and Gemini
+        run: |
+          npx -y @anthropic-ai/claude-code@2.1.294 plugin validate . --strict
+          npx -y @google/gemini-cli@0.63.0 extensions validate .
+      - name: Build ZIP
+        id: zip
+        run: echo "path=$(bash scripts/build-zip.sh | tail -1)" >> "$GITHUB_OUTPUT"
+      - name: Release notes from CHANGELOG
+        run: |
+          v="${GITHUB_REF_NAME#v}"
+          awk -v v="$v" '$0 ~ "^## "v"( |$)" {on=1; next} on && /^## / {exit} on' CHANGELOG.md > notes.md
+          test -s notes.md
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            "${{ steps.zip.outputs.path }}" "${{ steps.zip.outputs.path }}.sha256" \
+            --title "AI Board Lite ${GITHUB_REF_NAME}" --notes-file notes.md --verify-tag
