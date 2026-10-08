@@ -1,6 +1,6 @@
 ---
 name: actionables
-description: Turns a meeting transcript into decisions, action items with an owner, a due date and the quote behind each one, and per-person follow-up drafts. Never invents owners or dates, never sends anything. Use when the user shares a transcript and asks "what are the action items", "what did we agree", "wat zijn de actionables", "wat waren mijn acties".
+description: Turns a meeting transcript into decisions, action items with an owner, a due date and the quote behind each one, and per-person follow-up drafts. Marks owners and dates nobody said as missing, and drafts follow-ups without sending them. Use when the user shares a transcript and asks "what are the action items", "what did we agree", "wat zijn de actionables", "wat waren mijn acties".
 ---
 
 # Actionables

@@ -1,6 +1,6 @@
 # AI Board Lite
 
-Free skills for the work that comes back every week in an executive's
+Skills for the work that comes back every week in an executive's
 calendar: meetings, presentations, spreadsheets and decisions. They work in
 Claude (the Claude app and Claude Code), ChatGPT and Codex, Gemini CLI and
 Grok Build.
@@ -33,14 +33,16 @@ this spreadsheet tell me".
 
 ## What these skills do and do not do
 
-- **They only use what you give them** in the conversation: a transcript,
-  notes, emails, decks, spreadsheets. They do not search your mail, calendar
+- **They work from what you give them** in the conversation: a transcript,
+  notes, emails, decks, spreadsheets. They don't search your mail, calendar
   or files on their own.
-- **They never invent numbers, owners, dates or agreements.** Anything that
-  is not in your material is marked as missing.
-- **They never send anything.** Follow-ups and updates are drafts for you.
-- **They create or change files only when you say yes**, and only where the
-  environment allows it. A spreadsheet you share is never overwritten; a
+- **Missing facts are marked as missing.** The skills are written to flag a
+  number, owner, date or agreement that isn't in your material rather than
+  fill it in. Check the output before you rely on it.
+- **They draft, you send.** The plugin has no way to send email, messages or
+  invites. Follow-ups and updates come back as drafts.
+- **They ask before creating or changing a file**, and only where the
+  environment allows it. A spreadsheet you share is left as it is; a
   corrected version is saved as a new file.
 - **No network calls, no data collection, no credentials.** The plugin is
   plain instructions. Your data goes only where your Claude or ChatGPT setup

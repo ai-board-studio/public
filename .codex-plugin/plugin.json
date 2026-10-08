@@ -1,7 +1,7 @@
 {
   "name": "ai-board-lite",
-  "version": "0.1.1",
-  "description": "Free executive skills for meetings, PowerPoint, Excel and decisions: action items from a transcript, meeting prep, board-ready decks and deck reviews, spreadsheet analysis and models, decision memos and stakeholder updates.",
+  "version": "0.1.2",
+  "description": "Executive skills for meetings, PowerPoint, Excel and decisions: action items from a transcript, meeting prep, board-ready decks and deck reviews, spreadsheet analysis and models, decision memos and stakeholder updates.",
   "author": {
     "name": "AI Board",
     "email": "jordi.daniels@ai-board.studio",
@@ -22,7 +22,7 @@
   "interface": {
     "displayName": "AI Board Lite",
     "shortDescription": "Meetings, decks, Excel, memos",
-    "longDescription": "AI Board Lite: free skills for the work that comes back every week in an executive's calendar.\n\n**Meetings.** Turn a transcript into decisions and action items with owners, dates and the quote behind each one, plus follow-up drafts. Prep a meeting from what changed since last time.\n\n**PowerPoint.** Build a board-ready deck from notes (storyline first, one message per slide, then a .pptx), review a deck the way a board member reads it, and compare two versions on message and numbers.\n\n**Excel.** Explain what a spreadsheet says with the biggest movements, variances and data problems, each with its cell reference, or build a working budget, forecast or tracker with real formulas.\n\n**Decisions.** Write a one-page decision memo with honest trade-offs, or a two-minute update for a board, investors or a team.\n\nThe skills only use what you give them, never invent numbers, never send anything and create files only when you say yes. They answer in your language.",
+    "longDescription": "AI Board Lite: skills for the work that comes back every week in an executive's calendar.\n\n**Meetings.** Turn a transcript into decisions and action items with owners, dates and the quote behind each one, plus follow-up drafts. Prep a meeting from what changed since last time.\n\n**PowerPoint.** Build a board-ready deck from notes (storyline first, one message per slide, then a .pptx), review a deck the way a board member reads it, and compare two versions on message and numbers.\n\n**Excel.** Explain what a spreadsheet says with the biggest movements, variances and data problems, each with its cell reference, or build a working budget, forecast or tracker with real formulas.\n\n**Decisions.** Write a one-page decision memo with honest trade-offs, or a two-minute update for a board, investors or a team.\n\nThe skills work from the material you share in the conversation and mark anything that is missing instead of filling it in. Follow-ups and updates come back as drafts for you to send, and the skills ask before they create a file. They answer in your language.",
     "developerName": "AI Board",
     "category": "Productivity",
     "capabilities": [],
