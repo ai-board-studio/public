@@ -1,6 +1,6 @@
 ---
 name: analyze-spreadsheet
-description: Reads an Excel or CSV file and explains what the numbers say in plain language. Finds the biggest movements, variances against budget or last period, outliers and formula or data problems, each with its sheet and cell reference. Never invents a number. Use for "what does this spreadsheet tell me", "explain these numbers", "wat zie je in deze excel", "waar zitten de afwijkingen".
+description: Reads an Excel or CSV file and explains what the numbers say in plain language. Finds the biggest movements, variances against budget or last period, outliers and formula or data problems, each with its sheet and cell reference. Flags gaps instead of filling them. Use for "what does this spreadsheet tell me", "explain these numbers", "wat zie je in deze excel", "waar zitten de afwijkingen".
 ---
 
 # Analyze Spreadsheet
