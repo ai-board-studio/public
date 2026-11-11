@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.4 — 2026-11-11
+
+Drop the SVG logo: the Claude plugin directory only accepts PNG, JPEG, GIF, WebP and ICO images. Codex now uses the PNG logo too. No skill changed.
+
 ## 0.1.3 — 2026-11-11
 
 The plugin now lives in `plugins/ai-board-lite/`, with only manifests, skills, images and docs in it. Repo tooling (CI, release scripts) sits outside the plugin folder, so plugin directories scan just what ships. Releases carry one asset, the plugin ZIP, which Gemini CLI now installs instead of the whole repository; its SHA-256 is in the release notes. No skill changed.

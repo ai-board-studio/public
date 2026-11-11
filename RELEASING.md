@@ -2,7 +2,11 @@
 
 The plugin is the folder `plugins/ai-board-lite/`. It holds only manifests,
 skills, images and docs; tooling stays outside it so plugin directories can
-scan everything that ships (`scripts/check.mjs` enforces this).
+scan everything that ships. The Claude directory only accepts Markdown, text,
+JSON, YAML and PNG/JPEG/GIF/WebP/ICO images (no SVG, nothing starting with
+`#!`) from organizations that aren't Verified; `scripts/check.mjs` enforces
+that for the plugin folder. The Claude directory submission must use
+`plugins/ai-board-lite` as its plugin path, not the repo root.
 
 One version number lives in five places, all under the plugin folder except
 the marketplace: `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`,
