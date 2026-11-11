@@ -25,20 +25,25 @@ jobs:
         run: node scripts/check.mjs --tag "$GITHUB_REF_NAME"
       - name: Validate for Claude and Gemini
         run: |
-          npx -y @anthropic-ai/claude-code@2.1.294 plugin validate . --strict
-          npx -y @google/gemini-cli@0.63.0 extensions validate .
+          npx -y @anthropic-ai/claude-code@2.1.294 plugin validate plugins/ai-board-lite --strict
+          npx -y @anthropic-ai/claude-code@2.1.294 plugin validate .claude-plugin/marketplace.json
+          npx -y @google/gemini-cli@0.63.0 extensions validate plugins/ai-board-lite
       - name: Build ZIP
         id: zip
         run: echo "path=$(bash scripts/build-zip.sh | tail -1)" >> "$GITHUB_OUTPUT"
       - name: Release notes from CHANGELOG
         run: |
           v="${GITHUB_REF_NAME#v}"
-          awk -v v="$v" '$0 ~ "^## "v"( |$)" {on=1; next} on && /^## / {exit} on' CHANGELOG.md > notes.md
+          awk -v v="$v" '$0 ~ "^## "v"( |$)" {on=1; next} on && /^## / {exit} on' plugins/ai-board-lite/CHANGELOG.md > notes.md
           test -s notes.md
+          printf '\nSHA-256: `%s`\n' "$(cut -d' ' -f1 "${{ steps.zip.outputs.path }}.sha256")" >> notes.md
+      # One asset only: Gemini CLI installs a release's single generic asset
+      # (the clean plugin ZIP) and falls back to the whole-repo tarball when
+      # there are more. The checksum goes in the notes instead.
       - name: Publish GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "$GITHUB_REF_NAME" \
-            "${{ steps.zip.outputs.path }}" "${{ steps.zip.outputs.path }}.sha256" \
+            "${{ steps.zip.outputs.path }}" \
             --title "AI Board Lite ${GITHUB_REF_NAME}" --notes-file notes.md --verify-tag

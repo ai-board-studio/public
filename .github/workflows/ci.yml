@@ -20,9 +20,9 @@ jobs:
         run: node scripts/check.mjs
       - name: Claude plugin and marketplace validate
         run: |
-          npx -y @anthropic-ai/claude-code@2.1.294 plugin validate . --strict
+          npx -y @anthropic-ai/claude-code@2.1.294 plugin validate plugins/ai-board-lite --strict
           npx -y @anthropic-ai/claude-code@2.1.294 plugin validate .claude-plugin/marketplace.json
       - name: Gemini extension validates
-        run: npx -y @google/gemini-cli@0.63.0 extensions validate .
+        run: npx -y @google/gemini-cli@0.63.0 extensions validate plugins/ai-board-lite
       - name: ZIP builds
         run: bash scripts/build-zip.sh
