@@ -5,8 +5,8 @@
 // - CHANGELOG.md has a section for that version
 // - with --tag vX.Y.Z, the tag matches the version
 // - every skill has portable frontmatter (name = folder name, a description)
-// - the plugin folder holds only manifests, Markdown, images and LICENSE: no
-//   scripts or other code, so directory safety scans read all of it
+// - the plugin folder holds only what the Claude directory accepts (see below):
+//   no scripts, SVG or other code, so the directory scan reads all of it
 // - referenced asset files exist, no OS junk files, no oversized files
 // Usage: node scripts/check.mjs [--tag vX.Y.Z]
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
@@ -71,9 +71,14 @@ for (const p of [claude.icon, codex.interface.logo, codex.interface.composerIcon
 
 if (read("LICENSE") !== read(`${PLUGIN_DIR}/LICENSE`)) fail(`LICENSE and ${PLUGIN_DIR}/LICENSE differ`);
 
-const IMAGES = new Set([".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg"]);
-const SHIPPED = new Set([".md", ".json", ...IMAGES]);
+// The Claude plugin directory only accepts these from non-Verified organizations:
+// Markdown, text, JSON, YAML and PNG/JPEG/GIF/WebP/ICO images, UTF-8 without NUL
+// bytes, nothing starting with "#!", no package manager config. SVG is not allowed.
+const IMAGES = new Set([".png", ".jpg", ".jpeg", ".gif", ".webp", ".ico"]);
+const TEXT = new Set([".md", ".txt", ".json", ".yaml", ".yml"]);
+const PACKAGE_CONFIG = /^(package\.json|package-lock\.json|pnpm-.*\.yaml|yarn\.lock|\.npmrc|\.yarnrc.*|bun\.lockb?)$/;
 const SKIP = new Set([".git", "node_modules", "dist"]);
+const utf8 = new TextDecoder("utf-8", { fatal: true });
 (function walk(dir) {
   for (const f of readdirSync(dir)) {
     if (SKIP.has(f)) continue;
@@ -82,8 +87,17 @@ const SKIP = new Set([".git", "node_modules", "dist"]);
     if (st.isDirectory()) { walk(p); continue; }
     if ([".DS_Store", "Thumbs.db", "desktop.ini"].includes(f)) fail(`${rel}: OS junk file`);
     if (!IMAGES.has(extname(f)) && st.size > 256 * 1024) fail(`${rel}: over 256 KiB`);
-    if (rel.startsWith(`${PLUGIN_DIR}/`) && f !== "LICENSE" && !SHIPPED.has(extname(f)))
-      fail(`${rel}: only manifests, Markdown, images and LICENSE belong in the plugin folder; keep tooling outside it`);
+    if (!rel.startsWith(`${PLUGIN_DIR}/`)) continue;
+    const ext = extname(f).toLowerCase();
+    if (IMAGES.has(ext)) continue;
+    if (!(TEXT.has(ext) || f === "LICENSE") || PACKAGE_CONFIG.test(f)) {
+      fail(`${rel}: the plugin directory only takes Markdown, text, JSON, YAML and PNG/JPEG/GIF/WebP/ICO here; keep tooling outside ${PLUGIN_DIR}`);
+      continue;
+    }
+    const bytes = readFileSync(p);
+    if (bytes.includes(0)) fail(`${rel}: contains NUL bytes`);
+    try { utf8.decode(bytes); } catch { fail(`${rel}: not valid UTF-8`); }
+    if (bytes.subarray(0, 2).toString() === "#!") fail(`${rel}: starts with #!`);
   }
 })(root);
 
