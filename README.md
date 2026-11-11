@@ -1,25 +1,8 @@
-# AI Board Lite
+# AI Board plugins
 
-Skills for the work that comes back every week in an executive's
-calendar: meetings, presentations, spreadsheets and decisions. They work in
-Claude (the Claude app and Claude Code), ChatGPT and Codex, Gemini CLI and
-Grok Build.
-
-| Area | Skill | What it does |
-|---|---|---|
-| Meetings | `actionables` | Turns a transcript into decisions and action items, each with an owner, a due date and the quote it came from. Drafts one follow-up per person. |
-| Meetings | `meeting-prep` | A delta brief for an upcoming meeting: what was agreed last time, what changed since, who owes what, three talking points. |
-| PowerPoint | `build-deck` | Turns notes or a brief into a board-ready deck: storyline first, one message per slide, then a `.pptx` or a slide-by-slide outline. |
-| PowerPoint | `review-deck` | Reviews a deck the way a board member reads it: does the story hold, do the numbers agree, what will they ask. |
-| PowerPoint | `compare-decks` | Compares two versions of a deck on message and numbers: changed figures, dropped claims, softened language. |
-| Excel | `analyze-spreadsheet` | Explains what a spreadsheet says, with the biggest movements, variances and data problems, each with its cell reference. |
-| Excel | `build-spreadsheet` | Builds a working `.xlsx` (budget, forecast, tracker) with real formulas and marked input cells. |
-| Decisions | `decision-memo` | A one-page decision memo: options including doing nothing, honest trade-offs, a recommendation and the exact ask. |
-| Decisions | `stakeholder-update` | A short update for a board, investors or a team: headline, status per topic, what moved, what is needed. |
-
-Ask in plain language, for example "what are the action items from this
-transcript", "turn these notes into five slides for the board" or "what does
-this spreadsheet tell me".
+This repository publishes [AI Board Lite](plugins/ai-board-lite/README.md):
+executive skills for meetings, PowerPoint, Excel and decisions, for Claude
+(the Claude app and Claude Code), ChatGPT and Codex, Gemini CLI and Grok Build.
 
 ## Install
 
@@ -31,43 +14,16 @@ this spreadsheet tell me".
 | Gemini CLI | `gemini extensions install https://github.com/ai-board-studio/public` |
 | Grok Build | Grok Build reads Claude Code marketplaces: add this repository as a marketplace source, then install `ai-board-lite` from the Marketplace tab. |
 
-## What these skills do and do not do
+What the skills do, and what they don't: [plugins/ai-board-lite/README.md](plugins/ai-board-lite/README.md).
 
-- **They work from what you give them** in the conversation: a transcript,
-  notes, emails, decks, spreadsheets. They don't search your mail, calendar
-  or files on their own.
-- **Missing facts are marked as missing.** The skills are written to flag a
-  number, owner, date or agreement that isn't in your material rather than
-  fill it in. Check the output before you rely on it.
-- **They draft, you send.** The plugin has no way to send email, messages or
-  invites. Follow-ups and updates come back as drafts.
-- **They ask before creating or changing a file**, and only where the
-  environment allows it. A spreadsheet you share is left as it is; a
-  corrected version is saved as a new file.
-- **No network calls, no data collection, no credentials.** The plugin is
-  plain instructions. Your data goes only where your Claude or ChatGPT setup
-  already sends it.
+## Layout
 
-## Optional tools
-
-Creating and reading `.pptx` and `.xlsx` files works where the environment can
-run Python (for example with `python-pptx`, `openpyxl` or
-[MarkItDown](https://github.com/microsoft/markitdown)). Without that, the
-skills give you an outline or a table to paste instead.
-
-## About AI Board
-
-These skills come from [AI Board](https://ai-board.studio), which sets up Claude
-as a working executive assistant on your own machine, with a vault that
-remembers your meetings, decisions and numbers, and routines that keep them
-current. In AI Board, meeting prep and updates read that history for you.
-
-## Support and privacy
-
-- Documentation: https://ai-board.studio/en/plugins/ai-board-lite
-- Support: https://ai-board.studio/en/plugins/support
-- Privacy statement: https://ai-board.studio/en/plugins/privacy
-- Mail: jordi.daniels@ai-board.studio
+- `plugins/ai-board-lite/`: the plugin, exactly as it ships (manifests for
+  Claude, Codex and Gemini, skills, images, docs). No code.
+- `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`: the
+  Claude and Codex marketplaces, pointing at the plugin folder.
+- `scripts/`, `.github/`: checks, version bump, ZIP build and release. See
+  [RELEASING.md](RELEASING.md).
 
 ## License
 

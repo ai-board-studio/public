@@ -1,39 +1,51 @@
 #!/usr/bin/env node
 // Checks the plugin before a merge or a release, with no dependencies:
 // - every provider manifest and marketplace entry carries the same name and version
+// - both marketplaces point at the plugin folder
 // - CHANGELOG.md has a section for that version
 // - with --tag vX.Y.Z, the tag matches the version
 // - every skill has portable frontmatter (name = folder name, a description)
+// - the plugin folder holds only manifests, Markdown, images and LICENSE: no
+//   scripts or other code, so directory safety scans read all of it
 // - referenced asset files exist, no OS junk files, no oversized files
 // Usage: node scripts/check.mjs [--tag vX.Y.Z]
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
-import { join, extname } from "node:path";
+import { join, extname, relative } from "node:path";
 
 const root = new URL("..", import.meta.url).pathname;
+const PLUGIN_DIR = "plugins/ai-board-lite";
+const plugin = join(root, PLUGIN_DIR);
 const errors = [];
 const fail = (msg) => errors.push(msg);
-const json = (p) => JSON.parse(readFileSync(join(root, p), "utf8"));
+const read = (p) => readFileSync(join(root, p), "utf8");
+const json = (p) => JSON.parse(read(p));
 
-const claude = json(".claude-plugin/plugin.json");
-const codex = json(".codex-plugin/plugin.json");
-const gemini = json("gemini-extension.json");
+const claude = json(`${PLUGIN_DIR}/.claude-plugin/plugin.json`);
+const codex = json(`${PLUGIN_DIR}/.codex-plugin/plugin.json`);
+const gemini = json(`${PLUGIN_DIR}/gemini-extension.json`);
 const claudeMarket = json(".claude-plugin/marketplace.json");
 const codexMarket = json(".agents/plugins/marketplace.json");
 const { name, version } = claude;
 
 if (!/^\d+\.\d+\.\d+$/.test(version)) fail(`version "${version}" is not X.Y.Z`);
 for (const [file, m] of [[".codex-plugin/plugin.json", codex], ["gemini-extension.json", gemini]]) {
-  if (m.name !== name) fail(`${file}: name "${m.name}" != "${name}"`);
-  if (m.version !== version) fail(`${file}: version "${m.version}" != "${version}"`);
+  if (m.name !== name) fail(`${PLUGIN_DIR}/${file}: name "${m.name}" != "${name}"`);
+  if (m.version !== version) fail(`${PLUGIN_DIR}/${file}: version "${m.version}" != "${version}"`);
 }
 const entry = claudeMarket.plugins.find((p) => p.name === name);
 if (!entry) fail(`.claude-plugin/marketplace.json: no entry for ${name}`);
-else if (entry.version !== version) fail(`.claude-plugin/marketplace.json: version "${entry.version}" != "${version}"`);
-if (!codexMarket.plugins.some((p) => p.name === name)) fail(`.agents/plugins/marketplace.json: no entry for ${name}`);
+else {
+  if (entry.version !== version) fail(`.claude-plugin/marketplace.json: version "${entry.version}" != "${version}"`);
+  if (entry.source !== `./${PLUGIN_DIR}`) fail(`.claude-plugin/marketplace.json: source "${entry.source}" != "./${PLUGIN_DIR}"`);
+}
+const codexEntry = codexMarket.plugins.find((p) => p.name === name);
+if (!codexEntry) fail(`.agents/plugins/marketplace.json: no entry for ${name}`);
+else if (codexEntry.source?.path !== `./${PLUGIN_DIR}`)
+  fail(`.agents/plugins/marketplace.json: path "${codexEntry.source?.path}" != "./${PLUGIN_DIR}"`);
 
-const changelog = readFileSync(join(root, "CHANGELOG.md"), "utf8");
+const changelog = read(`${PLUGIN_DIR}/CHANGELOG.md`);
 if (!new RegExp(`^## ${version.replaceAll(".", "\\.")}\\b`, "m").test(changelog))
-  fail(`CHANGELOG.md: no "## ${version}" section`);
+  fail(`${PLUGIN_DIR}/CHANGELOG.md: no "## ${version}" section`);
 
 const tagArg = process.argv.indexOf("--tag");
 if (tagArg !== -1) {
@@ -41,7 +53,7 @@ if (tagArg !== -1) {
   if (tag !== `v${version}`) fail(`tag "${tag}" does not match manifest version v${version}`);
 }
 
-const skillsDir = join(root, "skills");
+const skillsDir = join(plugin, "skills");
 for (const dir of readdirSync(skillsDir)) {
   const file = join(skillsDir, dir, "SKILL.md");
   if (!existsSync(file)) { fail(`skills/${dir}: no SKILL.md`); continue; }
@@ -55,17 +67,23 @@ for (const dir of readdirSync(skillsDir)) {
 }
 
 for (const p of [claude.icon, codex.interface.logo, codex.interface.composerIcon])
-  if (!existsSync(join(root, p))) fail(`asset ${p} is referenced but missing`);
+  if (!existsSync(join(plugin, p))) fail(`asset ${p} is referenced but missing`);
+
+if (read("LICENSE") !== read(`${PLUGIN_DIR}/LICENSE`)) fail(`LICENSE and ${PLUGIN_DIR}/LICENSE differ`);
 
 const IMAGES = new Set([".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg"]);
+const SHIPPED = new Set([".md", ".json", ...IMAGES]);
 const SKIP = new Set([".git", "node_modules", "dist"]);
 (function walk(dir) {
   for (const f of readdirSync(dir)) {
     if (SKIP.has(f)) continue;
-    const p = join(dir, f), rel = p.slice(root.length);
-    if (statSync(p).isDirectory()) { walk(p); continue; }
+    const p = join(dir, f), rel = relative(root, p);
+    const st = statSync(p);
+    if (st.isDirectory()) { walk(p); continue; }
     if ([".DS_Store", "Thumbs.db", "desktop.ini"].includes(f)) fail(`${rel}: OS junk file`);
-    if (!IMAGES.has(extname(f)) && statSync(p).size > 256 * 1024) fail(`${rel}: over 256 KiB`);
+    if (!IMAGES.has(extname(f)) && st.size > 256 * 1024) fail(`${rel}: over 256 KiB`);
+    if (rel.startsWith(`${PLUGIN_DIR}/`) && f !== "LICENSE" && !SHIPPED.has(extname(f)))
+      fail(`${rel}: only manifests, Markdown, images and LICENSE belong in the plugin folder; keep tooling outside it`);
   }
 })(root);
 

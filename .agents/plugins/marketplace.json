@@ -8,7 +8,7 @@
       "name": "ai-board-lite",
       "source": {
         "source": "local",
-        "path": "./"
+        "path": "./plugins/ai-board-lite"
       },
       "policy": {
         "installation": "AVAILABLE",
